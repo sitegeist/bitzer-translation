@@ -1,0 +1,7 @@
+Sitegeist:
+  Bitzer:
+    Translation:
+      languageDimension: 'language'
+      agents: {}
+#       en:
+#         de: ['Acme.Site:GermanTranslator']
