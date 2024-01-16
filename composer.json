@@ -1,0 +1,18 @@
+{
+    "name": "sitegeist/bitzer-translation",
+    "type": "neos-package",
+    "description": "The translation plugin for the Bitzer content lifecycle task manager for Neos CMS",
+    "require": {
+        "neos/neos": "~7.0 || ~8.0",
+        "neos/neos-ui": "~7.0 || ~8.0",
+        "neos/fusion": "~7.0 || ~8.0",
+        "neos/content-repository": "~7.0 || ~8.0",
+        "neos/fusion-afx": "~7.0 || ~8.0",
+        "sitegeist/bitzer": "~2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sitegeist\\Bitzer\\Translation\\": "Classes"
+        }
+    }
+}
