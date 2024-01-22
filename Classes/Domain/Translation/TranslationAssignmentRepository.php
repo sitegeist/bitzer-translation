@@ -1,39 +1,45 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Sitegeist\Bitzer\Translation\Domain\Translation;
 
 use Neos\Flow\Annotations as Flow;
-use Sitegeist\Bitzer\Domain\Agent\Agent;
-use Sitegeist\Bitzer\Domain\Agent\AgentIdentifier;
 
 /**
- * The approval assignment domain repository
- * @Flow\Scope("singleton")
+ * The translation assignment domain repository
  */
+#[Flow\Scope('singleton')]
 final class TranslationAssignmentRepository
 {
     /**
-     * @var array<string,array<string,array<string>>>
+     * @var array<string,array<string,mixed>>
      */
-    #[Flow\InjectConfiguration(path: 'agents', package: 'Sitegeist.Bitzer.Translation')]
-    protected array $agents;
+    #[Flow\InjectConfiguration(path: 'assignments')]
+    protected array $assignments;
 
     /**
-     * @return array<string,Agent>
+     * @return array<string,TranslationAssignment>
      */
-    public function findResponsibleAgentsForLanguage(string $referenceLanguage): array
+    public function findAssignmentsForLanguage(string $referenceLanguage): array
     {
         $agentsByTargetLanguage = [];
 
-        foreach ($this->agents[$referenceLanguage] as $targetLanguage => $agents) {
-            $agentsByTargetLanguage[$targetLanguage] = array_map(
-                fn(string $agent) => new Agent(
-                    AgentIdentifier::fromString($agent),
-                    mb_substr($agent, mb_strrpos($agent, ':') ?: 0)
-                ),
-                $agents
-            );
+        foreach ($this->assignments[$referenceLanguage] ?? [] as $targetLanguage => $assignment) {
+            $agentsByTargetLanguage[$targetLanguage] = TranslationAssignment::fromArray($assignment);
         }
 
         return $agentsByTargetLanguage;
+    }
+
+    public function findSourceLanguage(string $referenceLanguage): ?string
+    {
+        foreach ($this->assignments as $sourceLanguage => $assignmentsPerTargetLanguage) {
+            if (array_key_exists($referenceLanguage, $assignmentsPerTargetLanguage)) {
+                return $sourceLanguage;
+            }
+        }
+
+        return null;
     }
 }

@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Sitegeist\Bitzer\Translation;
 
 use Neos\ContentRepository\Domain\Model\Node;
 use Neos\ContentRepository\Domain\Service\PublishingService;
 use Neos\Flow\Core\Bootstrap;
 use Neos\Flow\Package as BasePackage;
-use Sitegeist\Bitzer\Approval\Domain\Task\Approval\ApprovalTaskZookeeper;
-use Sitegeist\Bitzer\Transtion\Domain\Task\Transtion\TranslationTaskZooKeeper;
+use Sitegeist\Bitzer\Translation\Domain\Task\Translation\TranslationTaskZookeeper;
 
 /**
  * The Sitegeist.Bitzer.Translation package
@@ -24,8 +26,29 @@ class Package extends BasePackage
         $dispatcher->connect(
             Node::class,
             'nodePropertyChanged',
-            TranslationTaskZooKeeper::class,
+            TranslationTaskZookeeper::class,
             'whenNodePropertiesWereSet'
+        );
+
+        $dispatcher->connect(
+            Node::class,
+            'nodeRemoved',
+            TranslationTaskZookeeper::class,
+            'whenNodeWasRemoved'
+        );
+
+        $dispatcher->connect(
+            PublishingService::class,
+            'nodeDiscarded',
+            TranslationTaskZookeeper::class,
+            'whenNodeWasRemoved'
+        );
+
+        $dispatcher->connect(
+            PublishingService::class,
+            'nodePublished',
+            TranslationTaskZookeeper::class,
+            'whenNodeWasPublished'
         );
     }
 }

@@ -1,7 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Sitegeist\Bitzer\Translation\Domain\Task\Translation;
 
-use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Domain\Projection\Content\TraversableNodeInterface;
 use Neos\Flow\Annotations as Flow;
 use Psr\Http\Message\UriInterface;
@@ -11,41 +13,23 @@ use Sitegeist\Bitzer\Domain\Task\TaskInterface;
 use Sitegeist\Bitzer\Domain\Agent\Agent;
 
 /**
- * The review task domain entity
- * @Flow\Proxy(false)
+ * The translation task domain entity
  */
+#[Flow\Proxy(false)]
 final class TranslationTask implements TaskInterface
 {
-    private TaskIdentifier $identifier;
-
-    private array $properties;
-
-    private \DateTimeImmutable $scheduledTime;
-
-    private ActionStatusType $actionStatus;
-
-    private Agent $agent;
-
-    private ?NodeInterface $object;
-
-    private ?UriInterface $target;
-
+    /**
+     * @param array<string,mixed> $properties
+     */
     public function __construct(
-        TaskIdentifier $identifier,
-        array $properties,
-        \DateTimeImmutable $scheduledTime,
-        ActionStatusType $actionStatus,
-        Agent $agent,
-        ?TraversableNodeInterface $object,
-        ?UriInterface $target
+        private readonly TaskIdentifier $identifier,
+        private readonly array $properties,
+        private readonly \DateTimeImmutable $scheduledTime,
+        private readonly ActionStatusType $actionStatus,
+        private readonly Agent $agent,
+        private readonly ?TraversableNodeInterface $object,
+        private readonly ?UriInterface $target
     ) {
-        $this->identifier = $identifier;
-        $this->properties = $properties;
-        $this->scheduledTime = $scheduledTime;
-        $this->actionStatus = $actionStatus;
-        $this->agent = $agent;
-        $this->object = $object;
-        $this->target = $target;
     }
 
     public static function getShortType(): string

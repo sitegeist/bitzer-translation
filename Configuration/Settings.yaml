@@ -1,7 +1,11 @@
 Sitegeist:
   Bitzer:
+    factories:
+      'Sitegeist\Bitzer\Translation\Domain\Task\Translation\TranslationTask': 'Sitegeist\Bitzer\Translation\Domain\Task\Translation\TranslationTaskFactory'
     Translation:
       languageDimension: 'language'
-      agents: {}
+      assignments: {}
 #       en:
-#         de: ['Acme.Site:GermanTranslator']
+#         de:
+#           agents: ['Acme.Site:GermanTranslator']
+#           interval: 'P1D'
